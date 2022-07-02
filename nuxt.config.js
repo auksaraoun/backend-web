@@ -41,11 +41,47 @@ export default {
   modules: [
     '@nuxtjs/dotenv',
     '@nuxtjs/axios',
+    '@nuxtjs/auth-next',
     'vue-sweetalert2/nuxt',
   ],
 
   axios: {
-    baseURL: process.env.API_URL
+    proxy: true,
+    credentials: true
+  },
+
+  proxy: {
+    '/api': { target: process.env.API_URL }
+  },
+
+  auth: {
+    autoFetch: true,
+    strategies: {
+      laravelSanctum: {
+        provider: 'laravel/sanctum',
+        url: '/api',
+        token: {
+          property: 'token',
+          global: true,
+          required: true,
+          type: 'Bearer'
+        },
+        endpoints: {
+          login: {
+            url: '/login',
+            method: 'post',
+          },
+          logout: {
+            url: '/logout',
+            method: 'get',
+          },
+          user: {
+            url: '/user',
+            method: 'get',
+          },
+        }
+      },
+    },
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify

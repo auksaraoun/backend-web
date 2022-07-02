@@ -5,7 +5,7 @@
     <v-card class="pa-5 px-10">
       <v-form ref="form" :value="false" @submit.prevent="storeCategory">
         <v-row>
-          <v-col :md="12">
+          <v-col class="col-12">
             <v-select
               :items="categories"
               :clearable="true"
@@ -16,7 +16,7 @@
             >
             </v-select>
           </v-col>
-          <v-col :md="12">
+          <v-col class="col-12">
             <v-text-field
               :rules="nameRules"
               v-model="category.name"
@@ -24,7 +24,7 @@
               required
             ></v-text-field>
           </v-col>
-          <v-col :md="12">
+          <v-col class="col-12">
             <v-btn type="submit" :disabled="btn_submit" color="primary"
               >Update</v-btn
             >

@@ -16,14 +16,6 @@
         </v-btn>
       </v-col>
     </v-row>
-    <v-text-field
-      v-model="filter.search"
-      label="Search"
-      @keyup="updateSearch"
-      single-line
-      hide-details
-    >
-    </v-text-field>
     <v-data-table
       :headers="headers"
       :items="categories.data"
@@ -34,69 +26,75 @@
       :loading-text="'loading'"
       @update:options="updateFilter"
     >
-      <template v-slot:body="{ items }">
-        <tbody>
-          <tr v-for="item in items" :key="item.id">
-            <td>{{ item.id }}</td>
-            <td>{{ item.main_category_name }}</td>
-            <td>{{ item.name }}</td>
-            <td>
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    class="mx-2"
-                    fab
-                    x-small
-                    color="warning"
-                    v-bind="attrs"
-                    v-on="on"
-                    :disabled="loading_button"
-                    :href="'category/' + item.id + '/edit'"
-                  >
-                    <v-icon dark> mdi-pencil </v-icon>
-                  </v-btn>
-                </template>
-                <span>Edit</span>
-              </v-tooltip>
+      <template v-slot:top>
+        <v-text-field
+          v-model="filter.search"
+          label="Search"
+          @keyup="updateSearch"
+          single-line
+          hide-details
+          class="mx-4 mb-4"
+        ></v-text-field>
+      </template>
+      <template slot="item.row_index" slot-scope="item">
+        {{ categories.row_start + item.index + 1 }}
+      </template>
+      <template slot="item.action" slot-scope="props">
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              class="mx-2"
+              fab
+              x-small
+              color="warning"
+              v-bind="attrs"
+              v-on="on"
+              :disabled="loading_button"
+              :href="'category/' + props.id + '/edit'"
+            >
+              <v-icon dark> mdi-pencil </v-icon>
+            </v-btn>
+          </template>
+          <span>Edit</span>
+        </v-tooltip>
 
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    class=""
-                    fab
-                    x-small
-                    color="error"
-                    v-bind="attrs"
-                    v-on="on"
-                    :disabled="loading_button"
-                    @click="deleteCategory(item.id)"
-                  >
-                    <v-icon dark> mdi-delete </v-icon>
-                  </v-btn>
-                </template>
-                <span>Delete</span>
-              </v-tooltip>
-            </td>
-          </tr>
-        </tbody>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              class=""
+              fab
+              x-small
+              color="error"
+              v-bind="attrs"
+              v-on="on"
+              :disabled="loading_button"
+              @click="deleteCategory(props.id)"
+            >
+              <v-icon dark> mdi-delete </v-icon>
+            </v-btn>
+          </template>
+          <span>Delete</span>
+        </v-tooltip>
       </template>
     </v-data-table>
   </v-col>
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 export default {
   name: "Category",
   data() {
     return {
       headers: [
         {
-          text: "ID",
-          value: "id",
+          text: "#",
+          value: "row_index",
+          sortable: false,
         },
         {
           text: "Main Category",
-          value: "category_id",
+          value: "main_category_name",
         },
         {
           text: "Name",
@@ -104,7 +102,8 @@ export default {
         },
         {
           text: "",
-          value: "",
+          value: "action",
+          sortable: false,
         },
       ],
       loading_table: false,
@@ -138,14 +137,25 @@ export default {
     updatePerPage(per_page) {
       this.filter.per_page = per_page;
     },
-    async getCategory() {
+    getCategory() {
       let vm = this;
       vm.loading_table = true;
-      let categoryApi = await vm.$axios.get("category", {
+      vm.$axios.get("api/category", {
         params: vm.filter,
+      }).then((res) => {
+        vm.loading_table =  false;
+        vm.categories = res.data.categories;
+        vm.categories.row_start =
+          (vm.categories.current_page - 1) * vm.categories.per_page;
+        vm.loading_table = false;
+      }).catch(function (error) {
+        vm.loading_table = false;
+        vm.$swal(
+          "Get Category",
+          error.response.data.message,
+          "error"
+        );
       });
-      vm.categories = categoryApi.data.categories;
-      vm.loading_table = false;
     },
     deleteCategory(category_id) {
       let vm = this;

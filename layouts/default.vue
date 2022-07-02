@@ -70,6 +70,11 @@ export default {
           title: "Category",
           to: "/category",
         },
+        {
+          icon: "mdi-apps",
+          title: "Logout",
+          to: "/logout",
+        },
       ],
       miniVariant: false,
       right: true,
