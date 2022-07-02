@@ -68,22 +68,22 @@ export default {
       if (vm.$refs.form.validate()) {
         vm.btn_submit = true;
         vm.$axios
-          .post("category", vm.category)
+          .post("api/category", vm.category)
           .then(function (res) {
             vm.btn_submit = false;
             if (res.data && res.data.status) {
-              vm.$swal("Category Edit", res.data.message, "success").then(
+              vm.$swal("Category Create", res.data.message, "success").then(
                 () => {
                   window.location.href = "/category";
                 }
               );
             } else {
-              vm.$swal("Category Edit", res.data.message, "error");
+              vm.$swal("Category Create", res.data.message, "error");
             }
           })
           .catch(function (error) {
             vm.btn_submit = false;
-            vm.$swal("Category Edit", error.response.data.message, "error");
+            vm.$swal("Category Create", error.response.data.message, "error");
           });
       }
     },

@@ -75,7 +75,7 @@ export default {
       if (vm.$refs.form.validate()) {
         vm.btn_submit = true;
         vm.$axios
-          .patch("category/" + vm.id, vm.category)
+          .patch("api/category/" + vm.id, vm.category)
           .then(function (res) {
             vm.btn_submit = false;
             if (res.data && res.data.status) {
