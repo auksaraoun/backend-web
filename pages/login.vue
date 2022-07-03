@@ -17,7 +17,7 @@
           <v-card-actions class="d-block text-center">
             <v-spacer />
 
-            <v-btn color="primary" type="submit" >
+            <v-btn :disabled="btn_submit" color="primary" type="submit" >
               <v-icon class="mx-1" dark> mdi-login-variant </v-icon>
               Login
             </v-btn>
@@ -51,11 +51,13 @@ export default {
     login() {
       let vm = this;
       if (vm.$refs.form.validate()) {
+        vm.btn_submit = true;
         vm.$auth.loginWith('laravelSanctum', {
           data: vm.form
         }).then(function (res){
           window.location.href = '/';
         }).catch(function (error){
+          vm.btn_submit = false;
           vm.$swal("Login", vm.getErrorText(error), "error");
         })
       }
