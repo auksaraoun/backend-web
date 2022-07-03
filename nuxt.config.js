@@ -27,6 +27,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    '~/plugins/mixins',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -56,6 +57,12 @@ export default {
   },
 
   auth: {
+    redirect: {
+      login: '/login',
+      logout: '/logout',
+      home: '/',
+      callback: '/',
+    },
     autoFetch: true,
     strategies: {
       laravelSanctum: {
@@ -83,6 +90,10 @@ export default {
         }
       },
     },
+  },
+
+  router: {
+    middleware: ['auth']
   },
 
   serverMiddleware: [

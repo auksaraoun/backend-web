@@ -83,7 +83,7 @@ export default {
           })
           .catch(function (error) {
             vm.btn_submit = false;
-            vm.$swal("Category Create", error.response.data.message, "error");
+            vm.$swal("Category Create", vm.getErrorText(error), "error");
           });
       }
     },

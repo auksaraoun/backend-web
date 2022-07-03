@@ -5,36 +5,18 @@
         <h1>Category</h1>
       </v-col>
       <v-col :md="6" class="text-md-right">
-        <v-btn
-          class="mx-2"
-          color="primary"
-          :disabled="loading_button"
-          to="/category/create"
-        >
-          <v-icon dark> mdi-add </v-icon>
+        <v-btn class="mx-2" color="primary" :disabled="loading_button" to="/category/create">
+          <v-icon dark> mdi-plus </v-icon>
           Add Category
         </v-btn>
       </v-col>
     </v-row>
-    <v-data-table
-      :headers="headers"
-      :items="categories.data"
-      :sort-by="'id'"
-      :server-items-length="categories.total"
-      :footer-props="{ 'items-per-page-options': row_per_page }"
-      :loading="loading_table"
-      :loading-text="'loading'"
-      @update:options="updateFilter"
-    >
+    <v-data-table :headers="headers" :items="categories.data" :sort-by="'id'" :server-items-length="categories.total"
+      :footer-props="{ 'items-per-page-options': row_per_page }" :loading="loading_table" :loading-text="'loading'"
+      @update:options="updateFilter">
       <template v-slot:top>
-        <v-text-field
-          v-model="filter.search"
-          label="Search"
-          @keyup="updateSearch"
-          single-line
-          hide-details
-          class="mx-4 mb-4"
-        ></v-text-field>
+        <v-text-field v-model="filter.search" label="Search" @keyup="updateSearch" single-line hide-details
+          class="mx-4 mb-4"></v-text-field>
       </template>
       <template slot="item.row_index" slot-scope="item">
         {{ categories.row_start + item.index + 1 }}
@@ -42,16 +24,8 @@
       <template slot="item.action" slot-scope="props">
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              class="mx-2"
-              fab
-              x-small
-              color="warning"
-              v-bind="attrs"
-              v-on="on"
-              :disabled="loading_button"
-              :href="'category/' + props.id + '/edit'"
-            >
+            <v-btn class="mx-2" fab x-small color="warning" v-bind="attrs" v-on="on" :disabled="loading_button"
+              :href="'category/' + props.id + '/edit'">
               <v-icon dark> mdi-pencil </v-icon>
             </v-btn>
           </template>
@@ -60,16 +34,8 @@
 
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              class=""
-              fab
-              x-small
-              color="error"
-              v-bind="attrs"
-              v-on="on"
-              :disabled="loading_button"
-              @click="deleteCategory(props.id)"
-            >
+            <v-btn class="" fab x-small color="error" v-bind="attrs" v-on="on" :disabled="loading_button"
+              @click="deleteCategory(props.id)">
               <v-icon dark> mdi-delete </v-icon>
             </v-btn>
           </template>
@@ -120,7 +86,7 @@ export default {
     };
   },
   mounted() {
-    this.getCategory();
+    // this.getCategory();
   },
   methods: {
     updateSearch() {
@@ -152,7 +118,7 @@ export default {
         vm.loading_table = false;
         vm.$swal(
           "Get Category",
-          error.response.data.message,
+          vm.getErrorText(error),
           "error"
         );
       });
@@ -190,7 +156,7 @@ export default {
                 vm.loading_button = false;
                 vm.$swal(
                   "Customer Delete",
-                  error.response.data.message,
+                  vm.getErrorText(error),
                   "error"
                 );
               });

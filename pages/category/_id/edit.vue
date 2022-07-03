@@ -90,7 +90,7 @@ export default {
           })
           .catch(function (error) {
             vm.btn_submit = false;
-            vm.$swal("Category Edit", error.response.data.message, "error");
+            vm.$swal("Category Edit", vm.getErrorText(error), "error");
           });
       }
     },
