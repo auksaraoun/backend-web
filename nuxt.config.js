@@ -60,8 +60,8 @@ export default {
     redirect: {
       login: '/login',
       logout: '/logout',
-      home: '/',
-      callback: '/',
+      home: false,
+      callback: false,
     },
     autoFetch: true,
     strategies: {
