@@ -2,16 +2,16 @@
   <v-col>
     <v-row>
       <v-col :md="6">
-        <h1>Category</h1>
+        <h1>Admin Group</h1>
       </v-col>
       <v-col :md="6" class="text-md-right">
-        <v-btn class="mx-2" color="primary" :disabled="loading_button" to="/category/create">
+        <v-btn class="mx-2" color="primary" :disabled="loading_button" to="/admin-group/create">
           <v-icon dark> mdi-plus </v-icon>
-          Add Category
+          Add Admin Group
         </v-btn>
       </v-col>
     </v-row>
-    <v-data-table :headers="headers" :items="categories.data" :sort-by="'id'" :server-items-length="categories.total"
+    <v-data-table :headers="headers" :items="admin_groups.data" :sort-by="'id'" :server-items-length="admin_groups.total"
       :footer-props="{ 'items-per-page-options': row_per_page }" :loading="loading_table" :loading-text="'loading'"
       @update:options="updateFilter">
       <template v-slot:top>
@@ -19,13 +19,13 @@
           class="mx-4 mb-4"></v-text-field>
       </template>
       <template slot="item.row_index" slot-scope="item">
-        {{ categories.row_start + item.index + 1 }}
+        {{ admin_groups.row_start + item.index + 1 }}
       </template>
       <template slot="item.action" slot-scope="props">
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-btn class="mx-2" fab x-small color="warning" v-bind="attrs" v-on="on" :disabled="loading_button"
-              :href="'category/' + props.item.id + '/edit'">
+              :href="'admin-group/' + props.id + '/edit'">
               <v-icon dark> mdi-pencil </v-icon>
             </v-btn>
           </template>
@@ -35,7 +35,7 @@
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-btn class="" fab x-small color="error" v-bind="attrs" v-on="on" :disabled="loading_button"
-              @click="deleteCategory(props.item.id)">
+              @click="deleteAdminGroup(props.id)">
               <v-icon dark> mdi-delete </v-icon>
             </v-btn>
           </template>
@@ -49,7 +49,7 @@
 <script>
 import { mapMutations } from 'vuex'
 export default {
-  name: "Category",
+  name: "AdminGroup",
   data() {
     return {
       headers: [
@@ -57,10 +57,6 @@ export default {
           text: "#",
           value: "row_index",
           sortable: false,
-        },
-        {
-          text: "Main Category",
-          value: "main_category_name",
         },
         {
           text: "Name",
@@ -82,15 +78,15 @@ export default {
         sortDesc: "id",
         search: "",
       },
-      categories: {},
+      admin_groups: {},
     };
   },
   mounted() {
-    // this.getCategory();
+    // this.getAdminGroup();
   },
   methods: {
     updateSearch() {
-      this.getCategory();
+      this.getAdminGroup();
     },
     updateFilter(filter) {
       let vm = this;
@@ -98,32 +94,32 @@ export default {
       vm.filter.per_page = filter.itemsPerPage;
       vm.filter.sortBy = filter.sortBy[0];
       vm.filter.sortDesc = filter.sortDesc[0] ? "desc" : "asc";
-      vm.getCategory();
+      vm.getAdminGroup();
     },
     updatePerPage(per_page) {
       this.filter.per_page = per_page;
     },
-    getCategory() {
+    getAdminGroup() {
       let vm = this;
       vm.loading_table = true;
-      vm.$axios.get("api/category", {
+      vm.$axios.get("api/admin-group", {
         params: vm.filter,
       }).then((res) => {
-        vm.loading_table =  false;
-        vm.categories = res.data.categories;
-        vm.categories.row_start =
-          (vm.categories.current_page - 1) * vm.categories.per_page;
+        vm.loading_table = false;
+        vm.admin_groups = res.data.admin_groups;
+        vm.admin_groups.row_start =
+          (vm.admin_groups.current_page - 1) * vm.admin_groups.per_page;
         vm.loading_table = false;
       }).catch(function (error) {
         vm.loading_table = false;
         vm.$swal(
-          "Get Category",
+          "Get Admin Group",
           vm.getErrorText(error),
           "error"
         );
       });
     },
-    deleteCategory(category_id) {
+    deleteAdminGroup(admin_group_id) {
       let vm = this;
       vm.$swal
         .fire({
@@ -139,23 +135,23 @@ export default {
           if (result.isConfirmed) {
             vm.loading_button = true;
             vm.$axios
-              .delete("api/category/" + category_id)
+              .delete("api/admin-group/" + admin_group_id)
               .then(function (res) {
                 vm.loading_button = false;
                 if (res.data && res.data.status) {
-                  vm.$swal("Category Delete", res.data.message, "success").then(
+                  vm.$swal("Admin Group Delete", res.data.message, "success").then(
                     () => {
-                      vm.getCategory();
+                      vm.getAdminGroup();
                     }
                   );
                 } else {
-                  vm.$swal("Category Delete", res.data.message, "error");
+                  vm.$swal("Admin Group Delete", res.data.message, "error");
                 }
               })
               .catch(function (error) {
                 vm.loading_button = false;
                 vm.$swal(
-                  "Category Delete",
+                  "Admin Group Delete",
                   vm.getErrorText(error),
                   "error"
                 );

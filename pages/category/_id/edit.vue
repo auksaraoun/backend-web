@@ -37,7 +37,7 @@
 
 <script>
 export default {
-  name: "Category",
+  name: "EditCategory",
   data() {
     return {
       id: this.$route.params.id,

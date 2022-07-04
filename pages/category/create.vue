@@ -26,7 +26,7 @@
           </v-col>
           <v-col class="col-12">
             <v-btn type="submit" :disabled="btn_submit" color="primary"
-              >Update</v-btn
+              >Create</v-btn
             >
           </v-col>
         </v-row>
@@ -37,7 +37,7 @@
 
 <script>
 export default {
-  name: "Category",
+  name: "CreateCategory",
   data() {
     return {
       id: this.$route.params.id,
