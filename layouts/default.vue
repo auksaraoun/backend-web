@@ -14,8 +14,7 @@
 
           </v-list-item>
 
-          <v-list-group v-else color="white" :value="['admin','admin-group'].includes($router.currentRoute)"
-            prepend-icon="mdi-account-circle">
+          <v-list-group v-else color="white" :value="match(['admin','admin-group'])" prepend-icon="mdi-account-circle">
 
             <template v-slot:activator>
               <v-list-item-title>{{ item.title }}</v-list-item-title>
@@ -115,5 +114,13 @@ export default {
       title: "Admin Shop",
     };
   },
+  methods: {
+    match(subLinks) {
+      let vm = this;
+      let path_name = vm.$router.currentRoute.fullPath.split('/')[1];
+      console.log(path_name);
+      return subLinks.includes(path_name);
+    }
+  }
 };
 </script>

@@ -40,7 +40,6 @@ export default {
   name: "CreateCategory",
   data() {
     return {
-      id: this.$route.params.id,
       categories: [],
       category: {
         category_id: "",
@@ -59,7 +58,7 @@ export default {
   methods: {
     async getCategory() {
       let vm = this;
-      let categoryApi = await vm.$axios.get("category");
+      let categoryApi = await vm.$axios.get("api/category");
       vm.categories = categoryApi.data.categories;
       console.log(vm.categories);
     },

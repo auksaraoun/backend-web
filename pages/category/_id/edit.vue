@@ -60,13 +60,13 @@ export default {
   methods: {
     async getCategory() {
       let vm = this;
-      let categoryApi = await vm.$axios.get("category");
+      let categoryApi = await vm.$axios.get("api/category");
       vm.categories = categoryApi.data.categories;
       console.log(vm.categories);
     },
     async showCategory() {
       let vm = this;
-      let categoryApi = await vm.$axios.get("category/" + vm.id);
+      let categoryApi = await vm.$axios.get("api/category/" + vm.id);
       vm.category.category_id = categoryApi.data.category.category_id;
       vm.category.name = categoryApi.data.category.name;
     },

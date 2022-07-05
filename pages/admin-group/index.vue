@@ -25,7 +25,7 @@
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-btn class="mx-2" fab x-small color="warning" v-bind="attrs" v-on="on" :disabled="loading_button"
-              :href="'admin-group/' + props.id + '/edit'">
+              :href="'admin-group/' + props.item.id + '/edit'">
               <v-icon dark> mdi-pencil </v-icon>
             </v-btn>
           </template>
@@ -35,7 +35,7 @@
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-btn class="" fab x-small color="error" v-bind="attrs" v-on="on" :disabled="loading_button"
-              @click="deleteAdminGroup(props.id)">
+              @click="deleteAdminGroup(props.item.id)">
               <v-icon dark> mdi-delete </v-icon>
             </v-btn>
           </template>
